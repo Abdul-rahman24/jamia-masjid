@@ -126,7 +126,6 @@ export default function MainLayout() {
                 <span className="font-black text-xl">{masjidInfo.name}</span>
               </div>
               <p className="text-emerald-200 text-sm mb-4">Kattumavadi, Tamil Nadu — PIN 614630</p>
-              <Link to="/admin" className="text-xs text-emerald-400 hover:text-emerald-200">Admin</Link>
             </div>
             <div>
               <h3 className="text-xs font-bold text-emerald-300 tracking-widest uppercase mb-4">Quick Links</h3>
@@ -161,7 +160,10 @@ export default function MainLayout() {
             </div>
           </div>
           <div className="border-t border-emerald-800 mt-10 pt-6 text-center text-sm text-emerald-400">
-            <p>&copy; {new Date().getFullYear()} {masjidInfo.name}. All rights reserved.</p>
+            <p>
+              &copy; {new Date().getFullYear()} {masjidInfo.name}. 
+              <Link to="/admin" className="cursor-default ml-1 hover:text-emerald-300">All rights reserved.</Link>
+            </p>
             <div className="mt-6 inline-block bg-emerald-900/50 border border-emerald-700/50 rounded-2xl px-6 py-3 shadow-lg">
               <p className="text-emerald-50 font-black text-lg md:text-xl tracking-wide drop-shadow-md uppercase">
                 {t('createdBy')}
