@@ -1,35 +1,27 @@
-import { api } from '../../services/api';
 import { Card, CardContent } from '../../components/ui/Card';
 import { Link } from 'react-router-dom';
-import { Clock, Megaphone, ClipboardList, BookOpen } from 'lucide-react';
+import { Clock, ClipboardList } from 'lucide-react';
+import { useData } from '../../contexts/DataContext';
 
 export default function Dashboard() {
-  const announcements = api.getAnnouncements().filter(a => a.active).length;
-  const janaazah = api.getJanaazah().filter(j => j.active).length;
-  const pendingRentals = api.getRentalRequests().filter(r => r.status === 'Pending').length;
+  const { resources, rentalRequests, janaazahSubmissions, nikahSubmissions } = useData();
+  const pendingRentals = rentalRequests.filter(r => r.status === 'Pending').length;
+  const pendingJan = janaazahSubmissions.filter(j => j.status === 'Pending').length;
+  const pendingNik = nikahSubmissions.filter(n => n.status === 'Pending').length;
+  const totalPending = pendingRentals + pendingJan + pendingNik;
+
+    const getResourceName = (id: string) => resources.find(r => r.id === id)?.name || 'Resource';
 
   return (
     <div>
       <h1 className="text-2xl font-bold text-gray-900 mb-6">Admin Dashboard</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <StatCard 
-          title="Active Announcements" 
-          value={announcements} 
-          icon={<Megaphone size={24} className="text-blue-600" />} 
-          link="/admin/announcements" 
-        />
-        <StatCard 
-          title="Active Janaazah" 
-          value={janaazah} 
-          icon={<BookOpen size={24} className="text-gray-900" />} 
-          link="/admin/janaazah" 
-        />
-        <StatCard 
-          title="Pending Rentals" 
-          value={pendingRentals} 
+          title="Pending Submissions" 
+          value={totalPending} 
           icon={<ClipboardList size={24} className="text-yellow-600" />} 
-          link="/admin/rentals" 
+          link="/admin/submissions" 
         />
         <StatCard 
           title="Prayer Times" 
@@ -43,26 +35,31 @@ export default function Dashboard() {
         <Card>
           <div className="p-6 border-b border-gray-100 flex justify-between items-center">
             <h2 className="text-lg font-bold text-gray-900">Recent Rental Requests</h2>
-            <Link to="/admin/rentals" className="text-sm text-[var(--color-primary)] font-medium hover:underline">View All</Link>
+            <Link to="/admin/submissions" className="text-sm text-[var(--color-primary)] font-medium hover:underline">View All</Link>
           </div>
           <CardContent className="p-0">
             <div className="divide-y divide-gray-100">
-              {api.getRentalRequests().slice(-5).reverse().map(req => (
-                <div key={req.id} className="p-4 sm:px-6 flex justify-between items-center">
-                  <div>
-                    <p className="font-semibold text-gray-900">{req.customerName}</p>
-                    <p className="text-sm text-gray-500">Resource ID: {req.resourceId} • {req.quantity} items</p>
+              {rentalRequests.slice(-5).reverse().map(req => {
+                const totalItems = req.items?.reduce((sum, item) => sum + item.quantity, 0) || 0;
+                const firstItemName = req.items && req.items.length > 0 ? getResourceName(req.items[0].resourceId) : 'Items';
+                
+                return (
+                  <div key={req.id} className="p-4 sm:px-6 flex justify-between items-center">
+                    <div>
+                      <p className="font-semibold text-gray-900">{req.customerName}</p>
+                      <p className="text-sm text-gray-500">{totalItems}x total ({firstItemName}{req.items?.length > 1 ? ' + more' : ''})</p>
+                    </div>
+                    <span className={`text-xs font-medium px-2 py-1 rounded-full ${
+                      req.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
+                      req.status === 'Approved' || req.status === 'Active' ? 'bg-green-100 text-green-800' :
+                      'bg-gray-100 text-gray-800'
+                    }`}>
+                      {req.status}
+                    </span>
                   </div>
-                  <span className={`text-xs font-medium px-2 py-1 rounded-full ${
-                    req.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
-                    req.status === 'Approved' || req.status === 'Active' ? 'bg-green-100 text-green-800' :
-                    'bg-gray-100 text-gray-800'
-                  }`}>
-                    {req.status}
-                  </span>
-                </div>
-              ))}
-              {api.getRentalRequests().length === 0 && (
+                );
+              })}
+              {rentalRequests.length === 0 && (
                 <div className="p-6 text-center text-gray-500">No recent requests</div>
               )}
             </div>

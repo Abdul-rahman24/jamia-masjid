@@ -1,10 +1,11 @@
-import { api } from '../services/api';
 import { Card, CardContent } from '../components/ui/Card';
 import { MapPin, Navigation, Copy } from 'lucide-react';
 import { useState } from 'react';
+import { useData } from '../contexts/DataContext';
 
 export default function Location() {
-  const loc = api.getLocationInfo();
+  const { locationInfo } = useData();
+  const loc = locationInfo;
   const [copied, setCopied] = useState(false);
 
   const copyAddress = () => {

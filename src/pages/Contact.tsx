@@ -1,10 +1,10 @@
-import { api } from '../services/api';
 import { Card, CardContent } from '../components/ui/Card';
 import { Phone, Mail, MessageCircle } from 'lucide-react';
+import { useData } from '../contexts/DataContext';
 
 export default function Contact() {
-  const contacts = api.getContacts();
-
+  const { contacts } = useData();
+  
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="mb-10 text-center">

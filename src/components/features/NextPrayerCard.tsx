@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react';
 import { Clock } from 'lucide-react';
 import { getNextPrayer, formatTime } from '../../utils/prayerTimes';
 import type { NextPrayerResult } from '../../utils/prayerTimes';
-import { api } from '../../services/api';
 import { useLang } from '../../contexts/LanguageContext';
+import { useData } from '../../contexts/DataContext';
 
 export default function NextPrayerCard() {
-  const [prayers] = useState(() => api.getPrayerTimes());
+  const { prayerTimes } = useData();
+  const [prayers] = useState(() => prayerTimes);
   const [nextPrayer, setNextPrayer] = useState<NextPrayerResult | null>(null);
   const [h, setH] = useState(0);
   const [m, setM] = useState(0);

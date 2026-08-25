@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
 import { AlertCircle, Info, X } from 'lucide-react';
-import { api } from '../../services/api';
 import type { Announcement } from '../../types';
+import { useData } from '../../contexts/DataContext';
 
 export default function AnnouncementBanner() {
+  const { announcements } = useData();
   const [activeAnnouncements, setActiveAnnouncements] = useState<Announcement[]>([]);
   const [dismissedIds, setDismissedIds] = useState<string[]>([]);
 
   useEffect(() => {
-    const all = api.getAnnouncements();
+    const all = announcements;
     const now = new Date();
     
     const active = all.filter(a => {

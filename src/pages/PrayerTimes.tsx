@@ -1,4 +1,3 @@
-import { api } from '../services/api';
 import { Card, CardContent } from '../components/ui/Card';
 import { formatTime } from '../utils/prayerTimes';
 import { toHijri } from '../utils/hijriDate';
@@ -6,12 +5,13 @@ import NextPrayerCard from '../components/features/NextPrayerCard';
 import { Calendar as CalendarIcon, Sunrise, Sunset, Star } from 'lucide-react';
 import { useLang } from '../contexts/LanguageContext';
 import { format } from 'date-fns';
+import { useData } from '../contexts/DataContext';
 
 export default function PrayerTimes() {
+  const { prayerTimes, jumuahInfo } = useData();
   const { t } = useLang();
-  const times = api.getPrayerTimes();
-  const jumuahInfo = api.getJumuahInfo();
-  const hijri = toHijri();
+  const times = prayerTimes;
+    const hijri = toHijri();
 
   const mainPrayers = times.filter(p => p.name !== 'Sunrise' && p.name !== 'Sunset');
   const sunrise = times.find(p => p.name === 'Sunrise');

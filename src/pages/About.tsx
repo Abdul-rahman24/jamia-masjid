@@ -1,15 +1,15 @@
 import { useEffect } from 'react';
-import { api } from '../services/api';
 import { Card, CardContent } from '../components/ui/Card';
 import { MapPin, ExternalLink, Info, Phone } from 'lucide-react';
 import { useLang } from '../contexts/LanguageContext';
 import { useLocation } from 'react-router-dom';
+import { useData } from '../contexts/DataContext';
 
 export default function About() {
+  const { masjidInfo, locationInfo, contacts } = useData();
   const { t } = useLang();
-  const info     = api.getMasjidInfo();
-  const contacts = api.getContacts();
-  const loc      = api.getLocationInfo();
+  const info     = masjidInfo;
+    const loc      = locationInfo;
   const location = useLocation();
 
   useEffect(() => {

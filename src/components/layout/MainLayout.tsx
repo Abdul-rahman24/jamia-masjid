@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { Menu, X, MapPin, Phone, Globe } from 'lucide-react';
-import { api } from '../../services/api';
 import { useLang } from '../../contexts/LanguageContext';
+import { useData } from '../../contexts/DataContext';
 
 export default function MainLayout() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
-  const masjidInfo = api.getMasjidInfo();
+  const { masjidInfo, locationInfo, contacts } = useData();
   const { lang, toggle, t } = useLang();
 
   useEffect(() => setOpen(false), [location]);
@@ -150,11 +150,11 @@ export default function MainLayout() {
               <ul className="space-y-3 text-sm text-emerald-100">
                 <li className="flex items-start gap-2">
                   <MapPin size={14} className="mt-0.5 text-[var(--color-accent)] flex-shrink-0" />
-                  <span>{api.getLocationInfo().address}</span>
+                  <span>{locationInfo.address}</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <Phone size={14} className="text-[var(--color-accent)] flex-shrink-0" />
-                  <span>{api.getContacts()[0]?.phone ?? '—'}</span>
+                  <span>{contacts[0]?.phone ?? '—'}</span>
                 </li>
               </ul>
             </div>

@@ -61,10 +61,9 @@ export type RentalStatus = 'Pending' | 'Approved' | 'Rejected' | 'Active' | 'Ret
 
 export interface RentalRequest {
   id: string;
-  resourceId: string;
+  items: { resourceId: string; quantity: number }[];
   customerName: string;
   phone: string;
-  quantity: number;
   startDate: string; // ISO date string (YYYY-MM-DD)
   returnDate: string; // ISO date string
   purpose: string;

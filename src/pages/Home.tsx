@@ -3,7 +3,7 @@ import { MapPin, Heart, CalendarDays, Star, Users, Clock, Sunrise, Sunset, Moon 
 import NextPrayerCard from '../components/features/NextPrayerCard';
 import AnnouncementBanner from '../components/features/AnnouncementBanner';
 import { Card, CardContent } from '../components/ui/Card';
-import { api } from '../services/api';
+import { useData } from '../contexts/DataContext';
 import { formatTime } from '../utils/prayerTimes';
 import { toHijri, getUpcomingEvents } from '../utils/hijriDate';
 import { useLang } from '../contexts/LanguageContext';
@@ -11,10 +11,8 @@ import { format } from 'date-fns';
 
 export default function Home() {
   const { t } = useLang();
-  const masjidInfo = api.getMasjidInfo();
-  const prayerTimes = api.getPrayerTimes();
-  const jumuahInfo = api.getJumuahInfo();
-  const janaazah = api.getJanaazah().filter(j => j.active);
+  const { masjidInfo, prayerTimes, jumuahInfo, janaazah: allJanaazah } = useData();
+  const janaazah = allJanaazah.filter(j => j.active);
   const hijri = toHijri();
   const events = getUpcomingEvents(5);
 

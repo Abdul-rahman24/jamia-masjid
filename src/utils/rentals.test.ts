@@ -6,10 +6,9 @@ describe('Rental Availability Logic', () => {
   const mockRequests: RentalRequest[] = [
     {
       id: 'req-1',
-      resourceId: 'chair-1',
+      items: [{ resourceId: 'chair-1', quantity: 50 }],
       customerName: 'Test',
       phone: '123',
-      quantity: 50,
       startDate: '2023-09-10',
       returnDate: '2023-09-12',
       purpose: 'Event',
@@ -18,10 +17,9 @@ describe('Rental Availability Logic', () => {
     },
     {
       id: 'req-2',
-      resourceId: 'chair-1',
+      items: [{ resourceId: 'chair-1', quantity: 30 }],
       customerName: 'Test2',
       phone: '123',
-      quantity: 30,
       startDate: '2023-09-12',
       returnDate: '2023-09-14',
       purpose: 'Event',
@@ -30,10 +28,9 @@ describe('Rental Availability Logic', () => {
     },
     {
       id: 'req-3',
-      resourceId: 'chair-1',
+      items: [{ resourceId: 'chair-1', quantity: 40 }],
       customerName: 'Test3',
       phone: '123',
-      quantity: 40,
       startDate: '2023-09-11',
       returnDate: '2023-09-11',
       purpose: 'Event',

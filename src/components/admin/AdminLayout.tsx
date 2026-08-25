@@ -3,9 +3,6 @@ import { Outlet, Link, useLocation } from 'react-router-dom';
 import { 
   LayoutDashboard, 
   Clock, 
-  Megaphone, 
-  BookOpen, 
-  Box, 
   ClipboardList, 
   LogOut,
   Menu,
@@ -23,11 +20,7 @@ export default function AdminLayout() {
   const navItems = [
     { name: 'Dashboard',     path: '/admin',              icon: <LayoutDashboard size={20} /> },
     { name: 'Prayer Times',  path: '/admin/prayers',      icon: <Clock size={20} /> },
-    { name: 'Announcements', path: '/admin/announcements',icon: <Megaphone size={20} /> },
-    { name: 'Janaazah',      path: '/admin/janaazah',     icon: <BookOpen size={20} /> },
     { name: 'Submissions',   path: '/admin/submissions',  icon: <ClipboardList size={20} /> },
-    { name: 'Resources',     path: '/admin/resources',    icon: <Box size={20} /> },
-    { name: 'Rentals',       path: '/admin/rentals',      icon: <ClipboardList size={20} /> },
   ];
 
   return (

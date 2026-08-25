@@ -5,10 +5,12 @@ import { CheckCircle2, Upload, CalendarCheck } from 'lucide-react';
 import { useLang } from '../contexts/LanguageContext';
 import type { NikahSubmission } from '../types';
 import { format } from 'date-fns';
+import { useData } from '../contexts/DataContext';
 
 export default function Nikah() {
+  const { nikahInfo } = useData();
   const { t } = useLang();
-  const nikah = api.getNikahInfo();
+  const nikah = nikahInfo;
 
   // form fields
   const [submitterName, setSubmitterName] = useState('');

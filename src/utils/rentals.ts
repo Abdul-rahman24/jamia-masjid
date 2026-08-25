@@ -12,11 +12,11 @@ export function checkAvailability(
   const reqStart = startOfDay(new Date(requestedStartDate));
   const reqEnd = startOfDay(new Date(requestedReturnDate));
 
-  // Find all active/approved requests for this resource that overlap
+  // Find all active/approved requests that have this resource and overlap
   const relevantRequests = allRequests.filter(req => 
-    req.resourceId === resourceId && 
     ['Approved', 'Active', 'Overdue'].includes(req.status) &&
-    req.id !== excludeRequestId
+    req.id !== excludeRequestId &&
+    req.items && req.items.some(item => item.resourceId === resourceId)
   );
 
   let maxUsed = 0;
@@ -32,7 +32,11 @@ export function checkAvailability(
       
       // If the current day falls within [rStart, rEnd], then it's used
       if (currentDay >= rStart && currentDay <= rEnd) {
-        usedOnThisDay += req.quantity;
+        // Find how many of the specific resource were requested in this request
+        const item = req.items.find(i => i.resourceId === resourceId);
+        if (item) {
+          usedOnThisDay += item.quantity;
+        }
       }
     }
 

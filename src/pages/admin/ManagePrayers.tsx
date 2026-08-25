@@ -2,13 +2,15 @@ import { useState, useEffect } from 'react';
 import { api } from '../../services/api';
 import { Card, CardContent } from '../../components/ui/Card';
 import type { PrayerTime } from '../../types';
+import { useData } from '../../contexts/DataContext';
 
 export default function ManagePrayers() {
+  const { prayerTimes } = useData();
   const [prayers, setPrayers] = useState<PrayerTime[]>([]);
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
-    setPrayers(api.getPrayerTimes());
+    setPrayers(prayerTimes);
   }, []);
 
   const handleChange = (index: number, field: keyof PrayerTime, value: string) => {

@@ -6,16 +6,17 @@ import { format } from 'date-fns';
 import { MapPin, Clock, Calendar, Upload, CheckCircle2, X, Phone } from 'lucide-react';
 import { useLang } from '../contexts/LanguageContext';
 import type { JanaazahSubmission } from '../types';
+import { useData } from '../contexts/DataContext';
 
 export default function Janaazah() {
+  const { janaazah, contacts } = useData();
   const { t } = useLang();
-  const allJanaazah = api.getJanaazah();
+  const allJanaazah = janaazah;
   const activeJanaazah = allJanaazah.filter(j => j.active);
   const pastJanaazah = allJanaazah.filter(j => !j.active)
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, 10);
-  const contacts = api.getContacts();
-
+  
   const [showForm, setShowForm] = useState(false);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
