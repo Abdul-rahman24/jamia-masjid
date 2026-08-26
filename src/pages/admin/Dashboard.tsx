@@ -10,7 +10,7 @@ export default function Dashboard() {
   const pendingNik = nikahSubmissions.filter(n => n.status === 'Pending').length;
   const totalPending = pendingRentals + pendingJan + pendingNik;
 
-    const getResourceName = (id: string) => resources.find(r => r.id === id)?.name || 'Resource';
+  const getResourceName = (id: string) => resources.find(r => r.id === id)?.name || 'Resource';
 
   return (
     <div>
@@ -31,11 +31,13 @@ export default function Dashboard() {
         />
       </div>
 
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="grid md:grid-cols-3 gap-6">
+        
+        {/* Recent Rentals */}
         <Card>
-          <div className="p-6 border-b border-gray-100 flex justify-between items-center">
-            <h2 className="text-lg font-bold text-gray-900">Recent Rental Requests</h2>
-            <Link to="/admin/submissions" className="text-sm text-[var(--color-primary)] font-medium hover:underline">View All</Link>
+          <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+            <h2 className="text-sm font-bold text-gray-900">Recent Rentals</h2>
+            <Link to="/admin/submissions" className="text-xs text-[var(--color-primary)] font-medium hover:underline">View All</Link>
           </div>
           <CardContent className="p-0">
             <div className="divide-y divide-gray-100">
@@ -44,29 +46,84 @@ export default function Dashboard() {
                 const firstItemName = req.items && req.items.length > 0 ? getResourceName(req.items[0].resourceId) : 'Items';
                 
                 return (
-                  <div key={req.id} className="p-4 sm:px-6 flex justify-between items-center">
+                  <div key={req.id} className="p-4 flex justify-between items-start flex-col sm:flex-row sm:items-center gap-2">
                     <div>
-                      <p className="font-semibold text-gray-900">{req.customerName}</p>
-                      <p className="text-sm text-gray-500">{totalItems}x total ({firstItemName}{req.items?.length > 1 ? ' + more' : ''})</p>
+                      <p className="font-semibold text-gray-900 text-sm">{req.customerName}</p>
+                      <p className="text-xs text-gray-500">{totalItems}x total ({firstItemName}{req.items?.length > 1 ? ' + more' : ''})</p>
                     </div>
-                    <span className={`text-xs font-medium px-2 py-1 rounded-full ${
-                      req.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
-                      req.status === 'Approved' || req.status === 'Active' ? 'bg-green-100 text-green-800' :
-                      'bg-gray-100 text-gray-800'
-                    }`}>
-                      {req.status}
-                    </span>
+                    <StatusBadge status={req.status} />
                   </div>
                 );
               })}
               {rentalRequests.length === 0 && (
-                <div className="p-6 text-center text-gray-500">No recent requests</div>
+                <div className="p-6 text-center text-sm text-gray-500">No recent requests</div>
               )}
             </div>
           </CardContent>
         </Card>
+
+        {/* Recent Janaazah */}
+        <Card>
+          <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+            <h2 className="text-sm font-bold text-gray-900">Recent Janaazah</h2>
+            <Link to="/admin/submissions" className="text-xs text-[var(--color-primary)] font-medium hover:underline">View All</Link>
+          </div>
+          <CardContent className="p-0">
+            <div className="divide-y divide-gray-100">
+              {janaazahSubmissions.slice(-5).reverse().map(req => (
+                <div key={req.id} className="p-4 flex justify-between items-start flex-col sm:flex-row sm:items-center gap-2">
+                  <div>
+                    <p className="font-semibold text-gray-900 text-sm">{req.submitterName}</p>
+                    <p className="text-xs text-gray-500">{req.submitterPhone}</p>
+                  </div>
+                  <StatusBadge status={req.status} />
+                </div>
+              ))}
+              {janaazahSubmissions.length === 0 && (
+                <div className="p-6 text-center text-sm text-gray-500">No recent requests</div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Recent Nikah */}
+        <Card>
+          <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+            <h2 className="text-sm font-bold text-gray-900">Recent Nikah</h2>
+            <Link to="/admin/submissions" className="text-xs text-[var(--color-primary)] font-medium hover:underline">View All</Link>
+          </div>
+          <CardContent className="p-0">
+            <div className="divide-y divide-gray-100">
+              {nikahSubmissions.slice(-5).reverse().map(req => (
+                <div key={req.id} className="p-4 flex justify-between items-start flex-col sm:flex-row sm:items-center gap-2">
+                  <div>
+                    <p className="font-semibold text-gray-900 text-sm">{req.groomName} & {req.brideName}</p>
+                    <p className="text-xs text-gray-500">Date: {req.preferredDate}</p>
+                  </div>
+                  <StatusBadge status={req.status} />
+                </div>
+              ))}
+              {nikahSubmissions.length === 0 && (
+                <div className="p-6 text-center text-sm text-gray-500">No recent requests</div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
       </div>
     </div>
+  );
+}
+
+function StatusBadge({ status }: { status: string }) {
+  return (
+    <span className={`text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider ${
+      status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
+      status === 'Approved' || status === 'Active' ? 'bg-green-100 text-green-800' :
+      'bg-gray-100 text-gray-800'
+    }`}>
+      {status}
+    </span>
   );
 }
 

@@ -3,13 +3,23 @@ import { Outlet, Link, useLocation } from 'react-router-dom';
 import { 
   LayoutDashboard, 
   Clock, 
-  ClipboardList, 
+  ClipboardList,
   LogOut,
   Menu,
-  X
+  X,
+  Lock,
+  Settings,
+  Moon
 } from 'lucide-react';
 
 export default function AdminLayout() {
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    sessionStorage.getItem('adminAuth') === 'true'
+  );
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const location = useLocation();
 
@@ -17,10 +27,74 @@ export default function AdminLayout() {
     setIsSidebarOpen(false);
   }, [location]);
 
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (username === 'admin' && password === '12345678') {
+      sessionStorage.setItem('adminAuth', 'true');
+      setIsAuthenticated(true);
+      setError('');
+    } else {
+      setError('Invalid credentials');
+    }
+  };
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('adminAuth');
+    setIsAuthenticated(false);
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white rounded-3xl shadow-xl p-8">
+          <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <Lock size={32} />
+          </div>
+          <h2 className="text-2xl font-black text-center text-gray-900 mb-8">Admin Access</h2>
+          {error && <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm font-bold text-center mb-6">{error}</div>}
+          
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div>
+              <label className="block text-sm font-bold text-gray-700 mb-1">Username</label>
+              <input 
+                type="text" 
+                value={username}
+                onChange={e => setUsername(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-[var(--color-primary)]"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-bold text-gray-700 mb-1">Password</label>
+              <input 
+                type="password" 
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-[var(--color-primary)]"
+                required
+              />
+            </div>
+            <button 
+              type="submit"
+              className="w-full bg-[var(--color-primary)] text-white font-bold py-3 rounded-xl hover:bg-emerald-600 transition-colors mt-6"
+            >
+              Login
+            </button>
+            <Link to="/" className="block text-center text-sm text-gray-500 mt-4 hover:text-[var(--color-primary)]">
+              &larr; Back to Home
+            </Link>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
   const navItems = [
     { name: 'Dashboard',     path: '/admin',              icon: <LayoutDashboard size={20} /> },
     { name: 'Prayer Times',  path: '/admin/prayers',      icon: <Clock size={20} /> },
     { name: 'Submissions',   path: '/admin/submissions',  icon: <ClipboardList size={20} /> },
+    { name: 'Ramadan',       path: '/admin/ramadan',      icon: <Moon size={20} /> },
+    { name: 'Site Config',   path: '/admin/settings',     icon: <Settings size={20} /> },
   ];
 
   return (
@@ -64,6 +138,7 @@ export default function AdminLayout() {
           <div className="pt-8 mt-8 border-t border-gray-800">
             <Link
               to="/"
+              onClick={handleLogout}
               className="flex items-center gap-3 px-3 py-3 rounded-md text-gray-400 hover:bg-gray-800 hover:text-white transition-colors"
             >
               <LogOut size={20} />

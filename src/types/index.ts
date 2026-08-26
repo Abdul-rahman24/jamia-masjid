@@ -3,7 +3,7 @@ export type PrayerName = 'Fajr' | 'Sunrise' | 'Dhuhr' | 'Asr' | 'Sunset' | 'Magh
 export interface PrayerTime {
   name: PrayerName;
   adhan: string;
-  iqamah?: string; // Optional if not provided
+  iqamah?: string;
 }
 
 export interface JumuahSession {
@@ -24,20 +24,20 @@ export interface Announcement {
   description: string;
   category: 'General' | 'Masjid' | 'Jumuah' | 'Janaazah' | 'Ramadan' | 'Important';
   priority: 'Normal' | 'Important' | 'Urgent';
-  publishedDate: string; // ISO format
-  expiryDate?: string; // ISO format
+  publishedDate: string;
+  expiryDate?: string;
   active: boolean;
 }
 
 export interface Janaazah {
   id: string;
   name: string;
-  date: string; // ISO format
+  date: string;
   prayerTime: string;
   prayerLocation: string;
   burialLocation: string;
   additionalInfo?: string;
-  publishedDate: string; // ISO format
+  publishedDate: string;
   active: boolean;
 }
 
@@ -64,12 +64,12 @@ export interface RentalRequest {
   items: { resourceId: string; quantity: number }[];
   customerName: string;
   phone: string;
-  startDate: string; // ISO date string (YYYY-MM-DD)
-  returnDate: string; // ISO date string
+  startDate: string;
+  returnDate: string;
   purpose: string;
   notes?: string;
   status: RentalStatus;
-  createdAt: string; // ISO string
+  createdAt: string;
   adminNotes?: string;
 }
 
@@ -135,4 +135,61 @@ export interface NikahSubmission {
   submittedAt: string;
   status: SubmissionStatus;
   adminNotes?: string;
+}
+
+// ── Ramadan ──────────────────────────────────────────────────
+export interface TimetableDay {
+  day: number;
+  date: string;
+  sehri: string;
+  iftar: string;
+}
+
+export interface TaraweehInfo {
+  time: string;
+  rakaat: string;
+  imam: string;
+  specialNights: string[];
+}
+
+export interface DailyDua {
+  day: number;
+  arabic: string;
+  transliteration: string;
+  translation: string;
+}
+
+export interface RamadanReminder {
+  id: string;
+  title: string;
+  body: string;
+  icon: string;
+}
+
+export interface ImportantNight {
+  night: number;
+  title: string;
+  description: string;
+}
+
+export interface RamadanEvent {
+  id: string;
+  label: string;
+  date: string;
+  hijriDate: string;
+  highlight: boolean;
+}
+
+export interface RamadanSettings {
+  year: string;
+  startDate: string;
+  endDate: string;
+  eidDate: string;
+  timetable: TimetableDay[];
+  taraweeh: TaraweehInfo;
+  duas: DailyDua[];
+  reminders: RamadanReminder[];
+  importantNights: ImportantNight[];
+  keyEvents: RamadanEvent[];
+  nisabGoldGrams: number;
 }

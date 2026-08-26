@@ -23,6 +23,8 @@ import Ramadan from './pages/Ramadan';
 import Dashboard from './pages/admin/Dashboard';
 import ManagePrayers from './pages/admin/ManagePrayers';
 import ManageSubmissions from './pages/admin/ManageSubmissions';
+import ManageSettings from './pages/admin/ManageSettings';
+import ManageRamadan from './pages/admin/ManageRamadan';
 
 function App() {
   return (
@@ -47,6 +49,8 @@ function App() {
               <Route index element={<Dashboard />} />
               <Route path="prayers" element={<ManagePrayers />} />
               <Route path="submissions" element={<ManageSubmissions />} />
+              <Route path="settings" element={<ManageSettings />} />
+              <Route path="ramadan" element={<ManageRamadan />} />
               <Route path="*" element={<Dashboard />} />
             </Route>
           </Routes>

@@ -12,7 +12,8 @@ import type {
   LocationInfo, 
   MasjidInfo,
   JanaazahSubmission,
-  NikahSubmission
+  NikahSubmission,
+  RamadanSettings
 } from '../types';
 
 export const api = {
@@ -57,6 +58,21 @@ export const api = {
 
   getMasjidInfo: async (): Promise<MasjidInfo> => api.getSetting('masjidInfo', { name: 'Masjid', establishedYear: '', history: '', mission: '', facilities: [] }),
   setMasjidInfo: async (data: MasjidInfo) => api.setSetting('masjidInfo', data),
+
+  getRamadanSettings: async (): Promise<RamadanSettings> => api.getSetting('ramadanSettings', {
+    year: '1448 AH',
+    startDate: '2027-02-18',
+    endDate: '2027-03-19',
+    eidDate: '2027-03-20',
+    timetable: [],
+    taraweeh: { time: 'After Isha', rakaat: '20', imam: 'Hajrat', specialNights: [] },
+    duas: [],
+    reminders: [],
+    importantNights: [],
+    keyEvents: [],
+    nisabGoldGrams: 85,
+  }),
+  setRamadanSettings: async (data: RamadanSettings) => api.setSetting('ramadanSettings', data),
 
   // Announcements
   getAnnouncements: async (): Promise<Announcement[]> => {

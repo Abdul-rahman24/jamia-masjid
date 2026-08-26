@@ -50,6 +50,30 @@ export default function About() {
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
         
+        {/* ── Est. Year Stats Strip ── */}
+        <section className="animate-fade-up">
+          <div className="rounded-3xl overflow-hidden shadow-lg"
+            style={{ background: 'linear-gradient(135deg, #054030 0%, #0D7A4E 60%, #065235 100%)' }}>
+            <div className="h-1" style={{ background: 'linear-gradient(90deg,#D4AF37,#F0CC5A,#D4AF37)' }} />
+            <div className="p-8 grid grid-cols-3 gap-6 text-center">
+              <div>
+                <div className="text-4xl font-black text-white mb-1">{info.establishedYear || '2000'}</div>
+                <div className="text-emerald-300 text-xs font-bold uppercase tracking-widest">Est. Year</div>
+              </div>
+              <div>
+                <div className="text-4xl font-black text-white mb-1">5</div>
+                <div className="text-emerald-300 text-xs font-bold uppercase tracking-widest">Daily Prayers</div>
+              </div>
+              <div>
+                <div className="text-4xl font-black text-white mb-1">
+                  {Math.max(1, new Date().getFullYear() - (parseInt(info.establishedYear) || 2000))}+
+                </div>
+                <div className="text-emerald-300 text-xs font-bold uppercase tracking-widest">Years Serving</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Management (Minimal Style without buttons) */}
         <section>
           <div className="text-center mb-10 animate-fade-up">

@@ -13,7 +13,8 @@ import type {
   LocationInfo,
   MasjidInfo,
   JanaazahSubmission,
-  NikahSubmission
+  NikahSubmission,
+  RamadanSettings
 } from '../types';
 
 interface DataContextType {
@@ -30,11 +31,26 @@ interface DataContextType {
   masjidInfo: MasjidInfo;
   janaazahSubmissions: JanaazahSubmission[];
   nikahSubmissions: NikahSubmission[];
+  ramadanSettings: RamadanSettings;
   loading: boolean;
   refresh: () => Promise<void>;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
+
+const DEFAULT_RAMADAN: RamadanSettings = {
+  year: '1448 AH',
+  startDate: '2027-02-18',
+  endDate: '2027-03-19',
+  eidDate: '2027-03-20',
+  timetable: [],
+  taraweeh: { time: 'After Isha', rakaat: '20', imam: 'Hajrat', specialNights: [] },
+  duas: [],
+  reminders: [],
+  importantNights: [],
+  keyEvents: [],
+  nisabGoldGrams: 85,
+};
 
 export function DataProvider({ children }: { children: React.ReactNode }) {
   const [data, setData] = useState<Omit<DataContextType, 'loading' | 'refresh'>>({
@@ -51,6 +67,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     masjidInfo: { name: 'Masjid', establishedYear: '', history: '', mission: '', facilities: [] },
     janaazahSubmissions: [],
     nikahSubmissions: [],
+    ramadanSettings: DEFAULT_RAMADAN,
   });
   const [loading, setLoading] = useState(true);
 
@@ -70,7 +87,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         locationInfo,
         masjidInfo,
         janaazahSubmissions,
-        nikahSubmissions
+        nikahSubmissions,
+        ramadanSettings
       ] = await Promise.all([
         api.getPrayerTimes(),
         api.getJumuahInfo(),
@@ -84,7 +102,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         api.getLocationInfo(),
         api.getMasjidInfo(),
         api.getJanaazahSubmissions(),
-        api.getNikahSubmissions()
+        api.getNikahSubmissions(),
+        api.getRamadanSettings()
       ]);
 
       setData({
@@ -100,7 +119,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         locationInfo,
         masjidInfo,
         janaazahSubmissions,
-        nikahSubmissions
+        nikahSubmissions,
+        ramadanSettings,
       });
     } catch (e) {
       console.error("Failed to fetch data", e);
