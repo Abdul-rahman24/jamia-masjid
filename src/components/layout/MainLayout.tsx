@@ -35,7 +35,7 @@ export default function MainLayout() {
             {/* Logo */}
             <Link to="/" className="flex items-center gap-3 flex-shrink-0">
               <div className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-black text-xl shadow"
-                   style={{ background: 'linear-gradient(135deg,#0D7A4E,#059669)' }}>ج</div>
+                   style={{ background: 'linear-gradient(135deg,#0D7A4E,#059669)' }}>🕌</div>
               <div className="leading-tight">
                 <span className="font-black text-lg text-[var(--color-primary)] block">{masjidInfo.name}</span>
                 <span className="text-xs text-gray-500">Kattumavadi, TN</span>
