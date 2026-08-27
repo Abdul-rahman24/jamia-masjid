@@ -25,7 +25,7 @@ export default function MainLayout() {
   const isActive = (p: string) => p === '/' ? location.pathname === '/' : location.pathname.startsWith(p);
 
   return (
-    <div className="min-h-screen flex flex-col text-gray-900 bg-[var(--color-background)]">
+    <div className="min-h-screen flex flex-col text-gray-900 bg-[var(--color-background)] overflow-x-hidden">
 
       {/* ── Header ── */}
       <header className="bg-white shadow-md sticky top-0 z-50">
@@ -33,12 +33,12 @@ export default function MainLayout() {
           <div className="flex justify-between h-20 items-center gap-4">
 
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-3 flex-shrink-0">
-              <div className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-black text-xl shadow"
+            <Link to="/" className="flex items-center gap-3 min-w-0">
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-black text-xl shadow flex-shrink-0"
                    style={{ background: 'linear-gradient(135deg,#0D7A4E,#059669)' }}>🕌</div>
-              <div className="leading-tight">
-                <span className="font-black text-lg text-[var(--color-primary)] block">{masjidInfo.name}</span>
-                <span className="text-xs text-gray-500">Kattumavadi, TN</span>
+              <div className="leading-tight min-w-0">
+                <span className="font-black text-lg text-[var(--color-primary)] block truncate">{masjidInfo.name}</span>
+                <span className="text-xs text-gray-500 block truncate">Kattumavadi, TN</span>
               </div>
             </Link>
 
@@ -72,7 +72,7 @@ export default function MainLayout() {
             </div>
 
             {/* Mobile */}
-            <div className="flex items-center gap-2 lg:hidden">
+            <div className="flex items-center gap-2 lg:hidden flex-shrink-0">
               <button onClick={toggle}
                 className="flex items-center gap-1 border border-emerald-300 rounded-full px-2.5 py-1.5 text-xs font-bold text-[var(--color-primary)]">
                 <Globe size={12} /> {lang === 'en' ? 'த' : 'En'}
@@ -90,7 +90,7 @@ export default function MainLayout() {
 
         {/* Mobile menu */}
         {open && (
-          <div className="lg:hidden bg-white border-t absolute w-full shadow-xl z-50 slide-in">
+          <div className="lg:hidden bg-white border-t absolute left-0 w-full shadow-xl z-50 slide-in">
             <div className="px-4 py-4 space-y-1">
               {navLinks.map(l => (
                 <Link key={l.path} to={l.path}
