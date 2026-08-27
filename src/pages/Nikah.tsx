@@ -24,17 +24,32 @@ export default function Nikah() {
   const [brideProof, setBrideProof] = useState<File | null>(null);
   const [done, setDone] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const readFileAsBase64 = (file: File | null): Promise<string | undefined> => {
+    return new Promise((resolve) => {
+      if (!file) return resolve(undefined);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64 = reader.result as string;
+        resolve(JSON.stringify({ name: file.name, data: base64 }));
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!preferredDate) return;
     
+    const groomPayload = await readFileAsBase64(groomProof);
+    const bridePayload = await readFileAsBase64(brideProof);
+
     // save submission for admin
     const sub: NikahSubmission = {
       id: `nik-${Date.now()}`,
       submitterName, submitterPhone,
       preferredDate,
-      groomName, groomAddress, groomProof: groomProof?.name,
-      brideName, brideAddress, brideProof: brideProof?.name,
+      groomName, groomAddress, groomProof: groomPayload,
+      brideName, brideAddress, brideProof: bridePayload,
       submittedAt: new Date().toISOString(),
       status: 'Pending',
     };
