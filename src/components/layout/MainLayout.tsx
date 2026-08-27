@@ -13,14 +13,13 @@ export default function MainLayout() {
   useEffect(() => setOpen(false), [location]);
 
   const navLinks = [
-    { key: 'home',        path: '/' },
+    { key: 'home',          path: '/' },
+    { key: 'prayerTimes',   path: '/prayer-times' },
     { key: 'announcements', path: '/announcements' },
-    { key: 'prayerTimes', path: '/prayer-times' },
-    { key: 'janaazah',   path: '/janaazah' },
-    { key: 'nikah',      path: '/nikah' },
-    { key: 'rentOut',    path: '/rent-out' },
-    { key: 'ramadan',    path: '/ramadan' },
-    { key: 'about',      path: '/about' },
+    { key: 'nikah',         path: '/nikah' },
+    { key: 'janaazah',      path: '/janaazah' },
+    { key: 'rentOut',       path: '/rent-out' },
+    { key: 'about',         path: '/about' },
   ];
 
   const isActive = (p: string) => p === '/' ? location.pathname === '/' : location.pathname.startsWith(p);
@@ -29,86 +28,106 @@ export default function MainLayout() {
     <div className="min-h-screen flex flex-col text-gray-900 bg-[var(--color-background)] overflow-x-hidden">
 
       {/* ── Header ── */}
-      <header className="bg-white shadow-md sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-20 items-center gap-4">
+      <header className="sticky top-0 z-50">
+        {/* Top band: emerald accent line at very top */}
+        <div className="h-1 w-full bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-700" />
 
-            {/* Logo */}
-            <Link to="/" className="flex items-center gap-3 min-w-0">
-              <div className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-black text-xl shadow flex-shrink-0"
-                   style={{ background: 'linear-gradient(135deg,#0D7A4E,#059669)' }}>🕌</div>
-              <div className="leading-tight min-w-0">
-                <span className="font-black text-lg text-[var(--color-primary)] block truncate">{masjidInfo.name}</span>
-                <span className="text-xs text-gray-500 block truncate">Kattumavadi, TN</span>
+        {/* Main bar */}
+        <div className="bg-white shadow-md">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between h-[76px]">
+
+              {/* Logo */}
+              <Link to="/" className="flex items-center gap-3 flex-shrink-0">
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center text-xl shadow-sm flex-shrink-0"
+                     style={{ background: 'linear-gradient(135deg,#065235,#0D7A4E)' }}>🕌</div>
+                <div className="leading-none">
+                  <span className="font-black text-base lg:text-lg text-[#065235] block">{masjidInfo.name}</span>
+                  <span className="text-[10px] lg:text-xs text-emerald-600 font-semibold tracking-wide uppercase">Kattumavadi, TN</span>
+                </div>
+              </Link>
+
+              {/* Desktop Nav — centered */}
+              <nav className="hidden lg:flex items-center gap-1 flex-1 justify-center mx-6">
+                {navLinks.map(l => (
+                  <Link key={l.path} to={l.path}
+                    className={`relative px-3 py-2 rounded-lg text-[13px] font-bold transition-all whitespace-nowrap ${
+                      isActive(l.path)
+                        ? 'text-[#065235] bg-emerald-50'
+                        : 'text-gray-500 hover:text-[#065235] hover:bg-gray-50'
+                    }`}>
+                    {t(l.key)}
+                    {isActive(l.path) && (
+                      <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-0.5 bg-emerald-600 rounded-full" />
+                    )}
+                  </Link>
+                ))}
+              </nav>
+
+              {/* Right: Language + Donate (Desktop Only) */}
+              <div className="hidden lg:flex items-center gap-3 flex-shrink-0">
+                <button onClick={toggle}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-gray-500 bg-gray-50 border border-gray-200 hover:bg-gray-100 transition-colors">
+                  <Globe size={13} />
+                  <span className="text-gray-300">|</span>
+                  <span>{lang === 'en' ? 'தமிழ்' : 'English'}</span>
+                </button>
+
+                <Link to="/donations"
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-black text-white shadow transition-all hover:shadow-md hover:-translate-y-px"
+                  style={{ background: 'linear-gradient(135deg,#065235,#0D9960)' }}>
+                  💚 {t('donate')}
+                </Link>
               </div>
-            </Link>
 
-            {/* Desktop Nav */}
-            <nav className="hidden lg:flex items-center gap-0.5 flex-1 justify-center">
-              {navLinks.map(l => (
-                <Link key={l.path} to={l.path}
-                  className={`px-3 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap ${
-                    isActive(l.path)
-                      ? 'bg-emerald-50 text-[var(--color-primary)]'
-                      : 'text-gray-600 hover:text-[var(--color-primary)] hover:bg-emerald-50'
-                  }`}>{t(l.key)}</Link>
-              ))}
-            </nav>
-
-            {/* Right: Language + Donate */}
-            <div className="hidden lg:flex items-center gap-3 flex-shrink-0">
-              {/* Language switcher — clearly labelled */}
-              <button onClick={toggle}
-                className="flex items-center gap-2 border-2 border-emerald-300 rounded-full px-3 py-1.5 text-xs font-bold text-[var(--color-primary)] hover:bg-emerald-50 transition-colors">
-                <Globe size={14} />
-                <span className="text-gray-500">|</span>
-                <span>{lang === 'en' ? 'தமிழ்' : 'English'}</span>
-              </button>
-
-              <Link to="/donations"
-                className="text-white px-5 py-2.5 rounded-full font-bold text-sm shadow-lg hover:scale-105 transition-all"
-                style={{ background: 'linear-gradient(135deg,#0D7A4E,#10B981)' }}>
-                💚 {t('donate')}
-              </Link>
-            </div>
-
-            {/* Mobile */}
-            <div className="flex items-center gap-2 lg:hidden flex-shrink-0">
-              <button onClick={toggle}
-                className="flex items-center gap-1 border border-emerald-300 rounded-full px-2.5 py-1.5 text-xs font-bold text-[var(--color-primary)]">
-                <Globe size={12} /> {lang === 'en' ? 'த' : 'En'}
-              </button>
-              <Link to="/donations"
-                className="bg-[var(--color-primary)] text-white px-3 py-2 rounded-full text-xs font-bold">
-                {t('donate')}
-              </Link>
-              <button onClick={() => setOpen(!open)} className="text-gray-600 p-1">
-                {open ? <X size={26} /> : <Menu size={26} />}
+              {/* Mobile: Hamburger only */}
+              <button onClick={() => setOpen(!open)}
+                className="lg:hidden flex items-center justify-center w-9 h-9 rounded-lg text-[#065235] hover:bg-emerald-50 transition-colors">
+                {open ? <X size={22} /> : <Menu size={22} />}
               </button>
             </div>
           </div>
         </div>
 
-        {/* Mobile menu */}
+        {/* Mobile drawer */}
         {open && (
-          <div className="lg:hidden bg-white border-t absolute left-0 w-full shadow-xl z-50 slide-in">
-            <div className="px-4 py-4 space-y-1">
+          <div className="lg:hidden absolute top-full left-0 w-full bg-white shadow-xl z-50 border-t border-gray-100 slide-in">
+            {/* Quick actions row */}
+            <div className="flex gap-2 px-4 pt-4 pb-3 border-b border-gray-100">
+              <button onClick={toggle}
+                className="flex-1 flex items-center justify-center gap-2 py-2.5 border border-emerald-200 rounded-xl text-sm font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 transition-colors">
+                <Globe size={15} /> {lang === 'en' ? 'தமிழ்' : 'English'}
+              </button>
+              <Link to="/donations"
+                className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold text-white shadow"
+                style={{ background: 'linear-gradient(135deg,#065235,#0D9960)' }}>
+                💚 {t('donate')}
+              </Link>
+            </div>
+
+            {/* Nav links */}
+            <div className="px-3 py-3 space-y-1">
               {navLinks.map(l => (
                 <Link key={l.path} to={l.path}
-                  className={`block px-4 py-3 rounded-xl text-base font-semibold ${
+                  className={`flex items-center px-4 py-3 rounded-xl text-[15px] font-semibold transition-colors ${
                     isActive(l.path)
-                      ? 'bg-emerald-50 text-[var(--color-primary)]'
-                      : 'text-gray-700 hover:bg-gray-50 hover:text-[var(--color-primary)]'
-                  }`}>{t(l.key)}</Link>
+                      ? 'bg-emerald-50 text-[#065235]'
+                      : 'text-gray-700 hover:bg-gray-50 hover:text-[#065235]'
+                  }`}>
+                  {isActive(l.path) && <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 mr-2 flex-shrink-0" />}
+                  {t(l.key)}
+                </Link>
               ))}
-              <div className="grid grid-cols-2 gap-3 pt-3 border-t border-gray-100 mt-3">
-                <Link to="/location" className="flex items-center gap-2 text-gray-600 text-sm px-3 py-2 rounded-lg hover:bg-gray-50">
-                  <MapPin size={16} /> {t('locTitle')}
-                </Link>
-                <Link to="/contact" className="flex items-center gap-2 text-gray-600 text-sm px-3 py-2 rounded-lg hover:bg-gray-50">
-                  <Phone size={16} /> {t('conTitle')}
-                </Link>
-              </div>
+            </div>
+
+            {/* Bottom extras */}
+            <div className="grid grid-cols-2 gap-2 px-3 pb-4 pt-2 border-t border-gray-100">
+              <Link to="/location" className="flex items-center gap-2 text-gray-500 text-xs px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+                <MapPin size={14} className="text-emerald-600" /> {t('locTitle')}
+              </Link>
+              <Link to="/contact" className="flex items-center gap-2 text-gray-500 text-xs px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+                <Phone size={14} className="text-emerald-600" /> {t('conTitle')}
+              </Link>
             </div>
           </div>
         )}

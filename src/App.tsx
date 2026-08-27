@@ -27,6 +27,7 @@ import ManageSubmissions from './pages/admin/ManageSubmissions';
 import ManageSettings from './pages/admin/ManageSettings';
 import ManageRamadan from './pages/admin/ManageRamadan';
 import ManageAnnouncements from './pages/admin/ManageAnnouncements';
+import ManageEvents from './pages/admin/ManageEvents';
 
 function App() {
   return (
@@ -55,6 +56,7 @@ function App() {
               <Route path="submissions" element={<ManageSubmissions />} />
               <Route path="settings" element={<ManageSettings />} />
               <Route path="ramadan" element={<ManageRamadan />} />
+              <Route path="events" element={<ManageEvents />} />
               <Route path="*" element={<Dashboard />} />
             </Route>
           </Routes>

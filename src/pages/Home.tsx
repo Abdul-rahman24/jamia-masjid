@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { MapPin, ArrowRight, Megaphone, X } from 'lucide-react';
+import { MapPin, Megaphone, X } from 'lucide-react';
 import { format, differenceInDays } from 'date-fns';
 import { useData } from '../contexts/DataContext';
 import { getNextPrayer, formatTime } from '../utils/prayerTimes';
-import { toHijri, getUpcomingEvents } from '../utils/hijriDate';
+import { toHijri } from '../utils/hijriDate';
 import { useLang } from '../contexts/LanguageContext';
 import ImageSlider from '../components/features/ImageSlider';
 
@@ -108,10 +108,22 @@ const EVENT_COLORS: Record<string, string> = {
 // ─── Main Home Component ─────────────────────────────────────────────────────
 export default function Home() {
   const { t } = useLang();
-  const { masjidInfo, prayerTimes, jumuahInfo, janaazah: allJanaazah, announcements } = useData();
+  const { masjidInfo, prayerTimes, jumuahInfo, janaazah: allJanaazah, announcements, islamicEvents } = useData();
   const janaazah = allJanaazah.filter(j => j.active);
   const hijri = toHijri();
-  const events = getUpcomingEvents(5);
+  
+  const now = new Date();
+  now.setHours(0, 0, 0, 0); // Start of today
+  const events = islamicEvents
+    .filter(e => new Date(e.date) >= now)
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    .slice(0, 5)
+    .map(e => ({
+      name: e.name,
+      description: e.description,
+      color: e.color,
+      gregorianDate: new Date(e.date)
+    }));
 
   const mainPrayers = prayerTimes.filter(p => !['Sunrise', 'Sunset'].includes(p.name));
   const sunrise = prayerTimes.find(p => p.name === 'Sunrise');
@@ -476,16 +488,13 @@ export default function Home() {
       ═══════════════════════════════════════════════════════════ */}
       <section className="py-16 bg-gray-50 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Reveal className="flex items-end justify-between mb-8 gap-4">
+          <Reveal className="mb-8 text-center">
             <div>
               <h2 className="text-2xl font-black text-gray-900" style={{ fontFamily: "'Cinzel', serif" }}>
                 Upcoming Islamic Events
               </h2>
               <p className="text-gray-500 text-sm mt-1">Important dates on the Islamic calendar</p>
             </div>
-            <Link to="/ramadan" className="text-sm font-bold text-[var(--color-primary)] hover:underline whitespace-nowrap flex items-center gap-1">
-              Full Calendar <ArrowRight size={14} />
-            </Link>
           </Reveal>
 
           <div className="flex gap-5 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">

@@ -3,6 +3,7 @@ import type {
   PrayerTime, 
   JumuahInfo, 
   Announcement, 
+  IslamicEvent,
   Janaazah, 
   NikahInfo, 
   Resource, 
@@ -55,6 +56,9 @@ export const api = {
 
   getLocationInfo: async (): Promise<LocationInfo> => api.getSetting('locationInfo', { name: '', address: '', landmark: '', mapsLink: '' }),
   setLocationInfo: async (data: LocationInfo) => api.setSetting('locationInfo', data),
+
+  getIslamicEvents: async (): Promise<IslamicEvent[]> => api.getSetting('islamicEvents', []),
+  setIslamicEvents: async (data: IslamicEvent[]) => api.setSetting('islamicEvents', data),
 
   getMasjidInfo: async (): Promise<MasjidInfo> => api.getSetting('masjidInfo', { name: 'Masjid', establishedYear: '', history: '', mission: '', facilities: [] }),
   setMasjidInfo: async (data: MasjidInfo) => api.setSetting('masjidInfo', data),

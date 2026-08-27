@@ -18,6 +18,14 @@ export interface JumuahInfo {
   notes?: string;
 }
 
+export interface IslamicEvent {
+  id: string;
+  name: string;
+  date: string; // YYYY-MM-DD
+  description: string;
+  color: string;
+}
+
 export interface Announcement {
   id: string;
   title: string;

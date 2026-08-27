@@ -4,6 +4,7 @@ import type {
   PrayerTime,
   JumuahInfo,
   Announcement,
+  IslamicEvent,
   Janaazah,
   NikahInfo,
   Resource,
@@ -21,6 +22,7 @@ interface DataContextType {
   prayerTimes: PrayerTime[];
   jumuahInfo: JumuahInfo;
   announcements: Announcement[];
+  islamicEvents: IslamicEvent[];
   janaazah: Janaazah[];
   nikahInfo: NikahInfo;
   resources: Resource[];
@@ -57,6 +59,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     prayerTimes: [],
     jumuahInfo: { sessions: [] },
     announcements: [],
+    islamicEvents: [],
     janaazah: [],
     nikahInfo: { requirements: [], procedure: '', contactPerson: '', contactPhone: '', introduction: '' },
     resources: [],
@@ -78,6 +81,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         prayerTimes,
         jumuahInfo,
         announcements,
+        islamicEvents,
         janaazah,
         nikahInfo,
         resources,
@@ -93,6 +97,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         api.getPrayerTimes(),
         api.getJumuahInfo(),
         api.getAnnouncements(),
+        api.getIslamicEvents(),
         api.getJanaazah(),
         api.getNikahInfo(),
         api.getResources(),
@@ -110,6 +115,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         prayerTimes,
         jumuahInfo,
         announcements,
+        islamicEvents,
         janaazah,
         nikahInfo,
         resources,
