@@ -12,6 +12,7 @@ interface LangContextValue {
 const T: Record<string, Record<Lang, string>> = {
   // Nav
   home:           { en: 'Home',           ta: 'முகப்பு' },
+  announcements:  { en: 'Announcements',  ta: 'அறிவிப்புகள்' },
   prayerTimes:    { en: 'Prayer Times',   ta: 'தொழுகை நேரம்' },
   janaazah:       { en: 'Janaazah',       ta: 'ஜனாஸா' },
   nikah:          { en: 'Nikah',          ta: 'நிக்காஹ்' },

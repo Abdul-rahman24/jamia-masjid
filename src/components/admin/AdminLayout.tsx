@@ -92,6 +92,7 @@ export default function AdminLayout() {
   const navItems = [
     { name: 'Dashboard',     path: '/admin',              icon: <LayoutDashboard size={20} /> },
     { name: 'Prayer Times',  path: '/admin/prayers',      icon: <Clock size={20} /> },
+    { name: 'Announcements', path: '/admin/announcements',icon: <ClipboardList size={20} /> },
     { name: 'Submissions',   path: '/admin/submissions',  icon: <ClipboardList size={20} /> },
     { name: 'Ramadan',       path: '/admin/ramadan',      icon: <Moon size={20} /> },
     { name: 'Site Config',   path: '/admin/settings',     icon: <Settings size={20} /> },

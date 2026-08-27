@@ -17,6 +17,7 @@ import Location from './pages/Location';
 import Contact from './pages/Contact';
 import About from './pages/About';
 
+import Announcements from './pages/Announcements';
 import Ramadan from './pages/Ramadan';
 
 // Admin Pages
@@ -25,6 +26,7 @@ import ManagePrayers from './pages/admin/ManagePrayers';
 import ManageSubmissions from './pages/admin/ManageSubmissions';
 import ManageSettings from './pages/admin/ManageSettings';
 import ManageRamadan from './pages/admin/ManageRamadan';
+import ManageAnnouncements from './pages/admin/ManageAnnouncements';
 
 function App() {
   return (
@@ -34,6 +36,7 @@ function App() {
           <Routes>
             <Route path="/" element={<MainLayout />}>
               <Route index element={<Home />} />
+              <Route path="announcements" element={<Announcements />} />
               <Route path="prayer-times" element={<PrayerTimes />} />
               <Route path="janaazah" element={<Janaazah />} />
               <Route path="nikah" element={<Nikah />} />
@@ -47,6 +50,7 @@ function App() {
 
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<Dashboard />} />
+              <Route path="announcements" element={<ManageAnnouncements />} />
               <Route path="prayers" element={<ManagePrayers />} />
               <Route path="submissions" element={<ManageSubmissions />} />
               <Route path="settings" element={<ManageSettings />} />

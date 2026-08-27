@@ -14,6 +14,7 @@ export default function MainLayout() {
 
   const navLinks = [
     { key: 'home',        path: '/' },
+    { key: 'announcements', path: '/announcements' },
     { key: 'prayerTimes', path: '/prayer-times' },
     { key: 'janaazah',   path: '/janaazah' },
     { key: 'nikah',      path: '/nikah' },

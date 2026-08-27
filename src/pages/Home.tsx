@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { MapPin, Heart, CalendarDays, Users, Moon, ArrowRight } from 'lucide-react';
+import { MapPin, ArrowRight, Megaphone, X } from 'lucide-react';
 import { format, differenceInDays } from 'date-fns';
 import { useData } from '../contexts/DataContext';
 import { getNextPrayer, formatTime } from '../utils/prayerTimes';
@@ -42,29 +42,6 @@ function Reveal({ children, className = '', delay = 0 }: { children: React.React
   );
 }
 
-// ─── 3D Tilt Card ────────────────────────────────────────────────────────────
-function TiltCard({ children, className = '' }: { children: React.ReactNode; className?: string }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const handleMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width;
-    const y = (e.clientY - rect.top) / rect.height;
-    const rotX = (y - 0.5) * -12;
-    const rotY = (x - 0.5) * 12;
-    ref.current.style.transform = `perspective(700px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.03)`;
-  };
-  const handleLeave = () => {
-    if (ref.current) ref.current.style.transform = 'perspective(700px) rotateX(0) rotateY(0) scale(1)';
-  };
-  return (
-    <div ref={ref} onMouseMove={handleMove} onMouseLeave={handleLeave}
-      style={{ transition: 'transform 0.12s ease', transformStyle: 'preserve-3d', willChange: 'transform' }}
-      className={className}>
-      {children}
-    </div>
-  );
-}
 
 // ─── Floating Particles ──────────────────────────────────────────────────────
 const Particles = () => (
@@ -131,7 +108,7 @@ const EVENT_COLORS: Record<string, string> = {
 // ─── Main Home Component ─────────────────────────────────────────────────────
 export default function Home() {
   const { t } = useLang();
-  const { masjidInfo, prayerTimes, jumuahInfo, janaazah: allJanaazah } = useData();
+  const { masjidInfo, prayerTimes, jumuahInfo, janaazah: allJanaazah, announcements } = useData();
   const janaazah = allJanaazah.filter(j => j.active);
   const hijri = toHijri();
   const events = getUpcomingEvents(5);
@@ -144,6 +121,7 @@ export default function Home() {
   // Next prayer detection (live, updates every second)
   const [nextPrayerName, setNextPrayerName] = useState('');
   const [countdown, setCountdown] = useState({ h: '00', m: '00', s: '00' });
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   useEffect(() => {
     const tick = () => {
@@ -429,47 +407,68 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════
-          5. COMMUNITY QUICK-ACCESS GRID (3D Tilt)
+          5. ANNOUNCEMENTS (Replaces Services)
       ═══════════════════════════════════════════════════════════ */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Reveal className="text-center mb-10">
-            <h2 className="text-3xl font-black text-gray-900" style={{ fontFamily: "'Cinzel', serif" }}>
-              Our Services
-            </h2>
-            <p className="text-gray-500 mt-2">Everything you need from your community masjid</p>
-          </Reveal>
+      {announcements.filter(a => a.active).length > 0 && (
+        <section className="py-16 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <Reveal className="text-center mb-10">
+              <h2 className="text-3xl font-black text-gray-900 flex items-center justify-center gap-3" style={{ fontFamily: "'Cinzel', serif" }}>
+                <Megaphone className="text-[var(--color-primary)]" size={32} />
+                {t('announcements') || 'Announcements'}
+              </h2>
+              <p className="text-gray-500 mt-2">Important news and updates from the Masjid</p>
+            </Reveal>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {[
-              { to: '/rent-out', icon: <CalendarDays size={28} />, label: t('rentOut'), desc: 'Rent chairs, mats & equipment for events', color: 'from-emerald-500 to-teal-600', delay: 0 },
-              { to: '/donations', icon: <Heart size={28} />, label: t('donTitle'), desc: 'Support your masjid — every rupee counts', color: 'from-amber-400 to-orange-500', delay: 100 },
-              { to: '/nikah', icon: <Users size={28} />, label: t('nikTitle'), desc: 'Book a Nikah ceremony with our guidance', color: 'from-blue-500 to-indigo-600', delay: 200 },
-              { to: '/ramadan', icon: <Moon size={28} />, label: t('ramTitle'), desc: 'Timetables, duas, Taraweeh & more', color: 'from-violet-500 to-purple-700', delay: 300 },
-            ].map((item) => (
-              <Reveal key={item.to} delay={item.delay}>
-                <TiltCard className="h-full">
-                  <Link to={item.to}
-                    className={`group relative h-full flex flex-col rounded-3xl p-6 bg-gradient-to-br ${item.color} text-white shadow-lg hover:shadow-2xl overflow-hidden`}>
-                    {/* Shimmer overlay */}
-                    <div className="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition-all duration-300 rounded-3xl" />
-                    <div className="relative z-10">
-                      <div className="w-14 h-14 bg-white/15 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        {item.icon}
-                      </div>
-                      <h3 className="text-xl font-black mb-2">{item.label}</h3>
-                      <p className="text-white/75 text-sm leading-relaxed mb-4">{item.desc}</p>
-                      <div className="flex items-center gap-1 text-white/80 text-xs font-bold group-hover:gap-2 transition-all">
-                        Learn More <ArrowRight size={14} />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {announcements.filter(a => a.active).slice(0, 3).map((a, idx) => {
+                let descText = a.description;
+                let img = null;
+                try {
+                  const parsed = JSON.parse(a.description);
+                  descText = parsed.text;
+                  img = parsed.image;
+                } catch(e) {}
+
+                return (
+                  <Reveal key={a.id} delay={idx * 100}>
+                    <div className={`h-full border-t-4 rounded-3xl shadow-xl hover:shadow-2xl transition-all overflow-hidden bg-white flex flex-col ${a.priority === 'Urgent' ? 'border-t-red-500' : a.priority === 'Important' ? 'border-t-orange-500' : 'border-t-[var(--color-primary)]'}`}>
+                      {img && (
+                        <div 
+                          className="w-full h-48 bg-gray-100 overflow-hidden border-b border-gray-100 shrink-0 cursor-pointer relative group"
+                          onClick={() => setSelectedImage(img)}
+                        >
+                          <img src={img} alt={a.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                            <span className="opacity-0 group-hover:opacity-100 text-white font-bold bg-black/50 px-3 py-1 rounded-full text-sm backdrop-blur-sm transition-opacity">View Image</span>
+                          </div>
+                        </div>
+                      )}
+                      <div className="p-6 flex flex-col flex-1">
+                        <div className="flex justify-between items-start mb-3">
+                          <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs font-bold uppercase tracking-wider">{a.category}</span>
+                          <span className="text-xs font-semibold text-gray-400">{format(new Date(a.publishedDate), 'MMM d, yyyy')}</span>
+                        </div>
+                        <h3 className="text-xl font-black text-gray-900 mb-2">{a.title}</h3>
+                        <p className="text-gray-600 text-sm line-clamp-3 mb-4 flex-1">{descText}</p>
+                        <Link to="/announcements" className="text-[var(--color-primary)] font-bold text-sm hover:underline mt-auto">Read More &rarr;</Link>
                       </div>
                     </div>
-                  </Link>
-                </TiltCard>
-              </Reveal>
-            ))}
+                  </Reveal>
+                );
+              })}
+            </div>
+            
+            {announcements.filter(a => a.active).length > 3 && (
+              <div className="text-center mt-10">
+                <Link to="/announcements" className="inline-block bg-[var(--color-primary)] text-white px-8 py-3 rounded-full font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all">
+                  View All Announcements
+                </Link>
+              </div>
+            )}
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
 
       {/* ═══════════════════════════════════════════════════════════
@@ -550,6 +549,24 @@ export default function Home() {
             </Reveal>
           </div>
         </section>
+      )}
+
+      {/* Image Modal */}
+      {selectedImage && (
+        <div 
+          className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={() => setSelectedImage(null)}
+        >
+          <button className="absolute top-4 right-4 text-white hover:text-gray-300 bg-black/50 rounded-full p-2">
+            <X size={28} />
+          </button>
+          <img 
+            src={selectedImage} 
+            alt="Announcement Full View" 
+            className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl" 
+            onClick={(e) => e.stopPropagation()} 
+          />
+        </div>
       )}
     </div>
   );
