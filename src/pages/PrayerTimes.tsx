@@ -6,6 +6,8 @@ import { Calendar as CalendarIcon, Sunrise, Sunset, Star } from 'lucide-react';
 import { useLang } from '../contexts/LanguageContext';
 import { format } from 'date-fns';
 import { useData } from '../contexts/DataContext';
+import PrayerDuas from '../components/features/PrayerDuas';
+import MakruhTimes from '../components/features/MakruhTimes';
 
 export default function PrayerTimes() {
   const { prayerTimes, jumuahInfo } = useData();
@@ -35,19 +37,33 @@ export default function PrayerTimes() {
         <div className="h-2 w-full" style={{ background: 'linear-gradient(90deg,#0D7A4E,#10B981)' }} />
         
         <CardContent className="p-0 bg-white flex flex-col flex-1">
-          {/* Sunrise / Sunset Separated Row */}
-          <div className="grid grid-cols-2 divide-x divide-gray-100 border-b border-gray-100 bg-orange-50/20">
-            <div className="p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 hover:bg-orange-50/50 transition-colors">
-              <div className="flex items-center gap-2 text-orange-500 font-bold text-sm uppercase tracking-wider">
-                <Sunrise size={20} /> Sunrise
+          {/* Sun & Night Separated Row */}
+          <div className="grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 divide-x-0 md:divide-x divide-gray-100 border-b border-gray-100 bg-orange-50/10">
+            <div className="p-4 sm:p-5 flex flex-col items-center justify-center text-center hover:bg-orange-50/50 transition-colors">
+              <div className="flex items-center gap-2 text-indigo-500 font-bold text-xs sm:text-sm uppercase tracking-wider mb-2">
+                <Star size={16} /> Tahajjud
               </div>
-              <span className="text-2xl font-black text-gray-900">{sunrise ? formatTime(sunrise.adhan) : '—'}</span>
+              <span className="text-base sm:text-lg font-black text-gray-900">Last 3rd of Night</span>
+              <span className="text-[10px] text-gray-400 font-semibold uppercase tracking-widest mt-1">Before Fajr</span>
             </div>
-            <div className="p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 hover:bg-orange-50/50 transition-colors">
-              <div className="flex items-center gap-2 text-orange-500 font-bold text-sm uppercase tracking-wider">
-                <Sunset size={20} /> Sunset
+            <div className="p-4 sm:p-5 flex flex-col items-center justify-center text-center hover:bg-orange-50/50 transition-colors">
+              <div className="flex items-center gap-2 text-orange-500 font-bold text-xs sm:text-sm uppercase tracking-wider mb-2">
+                <Sunrise size={16} /> Sunrise
               </div>
-              <span className="text-2xl font-black text-gray-900">{sunset ? formatTime(sunset.adhan) : '—'}</span>
+              <span className="text-xl sm:text-2xl font-black text-gray-900">{sunrise ? formatTime(sunrise.adhan) : '—'}</span>
+            </div>
+            <div className="p-4 sm:p-5 flex flex-col items-center justify-center text-center hover:bg-orange-50/50 transition-colors">
+              <div className="flex items-center gap-2 text-amber-500 font-bold text-xs sm:text-sm uppercase tracking-wider mb-2">
+                <Sunrise size={16} className="rotate-180 scale-y-[-1]" /> Ishraq
+              </div>
+              <span className="text-base sm:text-lg font-black text-gray-900">+15 mins</span>
+              <span className="text-[10px] text-gray-400 font-semibold uppercase tracking-widest mt-1">After Sunrise</span>
+            </div>
+            <div className="p-4 sm:p-5 flex flex-col items-center justify-center text-center hover:bg-orange-50/50 transition-colors">
+              <div className="flex items-center gap-2 text-orange-600 font-bold text-xs sm:text-sm uppercase tracking-wider mb-2">
+                <Sunset size={16} /> Sunset
+              </div>
+              <span className="text-xl sm:text-2xl font-black text-gray-900">{sunset ? formatTime(sunset.adhan) : '—'}</span>
             </div>
           </div>
 
@@ -55,21 +71,21 @@ export default function PrayerTimes() {
             <table className="w-full text-left">
               <thead>
                 <tr className="bg-gray-50 text-gray-400 border-b border-gray-100">
-                  <th className="py-4 px-8 text-xs font-bold uppercase tracking-widest">{t('prayer')}</th>
-                  <th className="py-4 px-8 text-xs font-bold uppercase tracking-widest">{t('adhan')}</th>
-                  <th className="py-4 px-8 text-xs font-bold uppercase tracking-widest text-right">{t('jamaah')}</th>
+                  <th className="py-4 px-4 sm:px-8 text-xs font-bold uppercase tracking-widest whitespace-nowrap">{t('prayer')}</th>
+                  <th className="py-4 px-4 sm:px-8 text-xs font-bold uppercase tracking-widest whitespace-nowrap">{t('adhan')}</th>
+                  <th className="py-4 px-4 sm:px-8 text-xs font-bold uppercase tracking-widest text-right whitespace-nowrap">{t('jamaah')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
                 {mainPrayers.map((p) => (
                   <tr key={p.name} className="hover:bg-emerald-50/40 transition-colors group">
-                    <td className="py-6 px-8 font-black text-gray-900 text-xl group-hover:text-[var(--color-primary)] transition-colors">
+                    <td className="py-5 sm:py-6 px-4 sm:px-8 font-black text-gray-900 text-lg sm:text-xl group-hover:text-[var(--color-primary)] transition-colors whitespace-nowrap">
                       {p.name}
                     </td>
-                    <td className="py-6 px-8 font-semibold text-gray-500 text-lg">
+                    <td className="py-5 sm:py-6 px-4 sm:px-8 font-semibold text-gray-500 text-base sm:text-lg whitespace-nowrap">
                       {formatTime(p.adhan)}
                     </td>
-                    <td className="py-6 px-8 text-right font-black text-2xl text-[var(--color-primary)]">
+                    <td className="py-5 sm:py-6 px-4 sm:px-8 text-right font-black text-xl sm:text-2xl text-[var(--color-primary)] whitespace-nowrap">
                       {p.iqamah ? formatTime(p.iqamah) : '—'}
                     </td>
                   </tr>
@@ -104,6 +120,9 @@ export default function PrayerTimes() {
           </div>
         </CardContent>
       </Card>
+
+      <MakruhTimes />
+      <PrayerDuas />
     </div>
   );
 }
